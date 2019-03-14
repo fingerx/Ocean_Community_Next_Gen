@@ -22,7 +22,13 @@ public class uocean  {
 		public static extern void InitWaveGenerator();
 
 		[DllImport("__Internal")]
-		public static extern void UoceanClear();
+		protected static extern void setMyRandoms(bool enable, int size, IntPtr g1, IntPtr g2);
+
+		[DllImport("__Internal")]
+		protected static extern void getFixedTable(IntPtr g1, IntPtr g2);
+
+		[DllImport("__Internal")]
+		public static extern void UoceanClear(bool destroy);
 
 		//set the number of threads for native multithreaded functions (android and Linux).
 		//for all the other platforms(except webgl and webplayer) set this to >1 to have parallelization. If set to 1 no parallelization will be used.
@@ -70,61 +76,149 @@ private const string libname = "ocean";
 
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX || UNITY_ANDROID || UNITY_STANDALONE_LINUX || UNITY_WSA
 
-        [DllImport(libname, EntryPoint = "UoceanInit")]
+
+        [DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        ,EntryPoint = "UoceanInit")]
 		public static extern void UoceanInit( int w, int h, float wx, float wy, float wvspd, float wvscl, float chop, float sx, float sy, float sz, float wvdf);
 
-		[DllImport(libname, EntryPoint = "UInit")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif        
+        , EntryPoint = "UInit")]
 		public static extern void UInit( int w, int h, float wx, float wy, float wvspd, float wvscl, float chop, float sx, float sy, float sz, float wvdf);
 
-		[DllImport(libname, EntryPoint = "updVars")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "updVars")]
 		public static extern void updVars( float wx, float wy, float wvspd, float wvscl, float chop, float wvdf, bool hh0);
 
-		[DllImport(libname, EntryPoint = "InitWaveGenerator")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "InitWaveGenerator")]
 		public static extern void InitWaveGenerator();
 
-		[DllImport(libname, EntryPoint = "UoceanClear")]
-		public static extern void UoceanClear();
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "setMyRandoms")]
+		protected static extern void setMyRandoms(bool enable, int size, IntPtr g1, IntPtr g2);
+
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "getFixedTable")]
+		protected static extern void getFixedTable(IntPtr g1, IntPtr g2);
+
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "UoceanClear")]
+		public static extern void UoceanClear(bool destroy);
 
 		//set the number of threads for native multithreaded functions (android and Linux).
 		//for all the other platforms(except webgl and webplayer) set this to >1 to have parallelization. If set to 1 no parallelization will be used.
-		[DllImport(libname, EntryPoint = "setThreads")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "setThreads")]
 		public static extern void setThreads(int threads);
 
-		[DllImport(libname, EntryPoint = "calcComplex")]
-		protected static extern void calcComplex(IntPtr data, IntPtr tx, float time, int ha, int hb);
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "calcComplex")]
+        protected static extern void calcComplex(IntPtr data, IntPtr tx, float time, int ha, int hb);
 
-		[DllImport(libname, EntryPoint = "fft1")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "fft1")]
 		protected static extern void fft1(IntPtr data);
 
-		[DllImport(libname, EntryPoint = "fft2")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "fft2")]
 		protected static extern void fft2(IntPtr tx);
 
-		[DllImport(libname, EntryPoint = "calcPhase3b")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "calcPhase3b")]
 		protected static extern void calcPhase3b(IntPtr data, IntPtr tx, IntPtr vrt, IntPtr baseH, IntPtr normals, IntPtr tangents, bool rre, IntPtr canCheck, float scaleA);
 
-		[DllImport(libname, EntryPoint = "calcPhase4b")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "calcPhase4b")]
 		protected static extern void calcPhase4b(IntPtr vrt, IntPtr tangents, IntPtr floats, bool player, IntPtr pos);
 
-		[DllImport(libname, EntryPoint = "updateTilesA")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "updateTilesA")]
 		protected static extern void updateTilesA(IntPtr vrtLOD, IntPtr vrt, IntPtr tangentsLOD, IntPtr tangents, IntPtr normalsLOD, IntPtr normals, int L0D, float farLodOffset, IntPtr flodoffset, float flodFact);
 
-		[DllImport(libname, EntryPoint = "getHeightBatchV")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "getHeightBatchV")]
 		protected static extern void getHeightBatchV(IntPtr data, int size, IntPtr Vec3);
 
-		[DllImport(libname, EntryPoint = "getHeightBatchF")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "getHeightBatchF")]
 		protected static extern void getHeightBatchF(IntPtr data, int size, IntPtr Vec3);
 
-		[DllImport(libname, EntryPoint = "getChoppyBatchV")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "getChoppyBatchV")]
 		protected static extern void getChoppyBatchV(IntPtr data, int size, IntPtr Vec3);
 
-		[DllImport(libname, EntryPoint = "getChoppyBatchF")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "getChoppyBatchF")]
 		protected static extern void getChoppyBatchF(IntPtr data, int size, IntPtr Vec3);
 
-		[DllImport(libname, EntryPoint = "getHeightChoppyBatchV")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "getHeightChoppyBatchV")]
 		protected static extern void getHeightChoppyBatchV(IntPtr data, int size, IntPtr Vec3);
 
-		[DllImport(libname, EntryPoint = "getHeightChoppyBatchF")]
+		[DllImport(libname
+        #if (UNITY_STANDALONE_WIN && ENABLE_IL2CPP)
+        , CallingConvention = CallingConvention.Cdecl
+        #endif
+        , EntryPoint = "getHeightChoppyBatchF")]
 		protected static extern void getHeightChoppyBatchF(IntPtr data, int size, IntPtr Vec3);
+
 
 #endif
 		//feed it with a Vector3 array where x and z are the input positions. Y will get the Height.
@@ -229,6 +323,20 @@ private const string libname = "ocean";
 			v1.Free(); v2.Free(); t1.Free(); t2.Free(); n1.Free(); n2.Free(); f1.Free();
 		}
 
+		public static void _setFixedRandomTable(bool enable, int size, float[] g1, float[] g2) {
+			GCHandle vg1 = GCHandle.Alloc(g1, GCHandleType.Pinned);
+			GCHandle vg2 = GCHandle.Alloc(g2, GCHandleType.Pinned);
 
+			setMyRandoms( enable, size, vg1.AddrOfPinnedObject(), vg2.AddrOfPinnedObject() );		
+			vg1.Free(); vg2.Free();
+		}
+
+		public static void _getFixedRandomTable(float[] g1, float[] g2) {
+			GCHandle vg1 = GCHandle.Alloc(g1, GCHandleType.Pinned);
+			GCHandle vg2 = GCHandle.Alloc(g2, GCHandleType.Pinned);
+
+			getFixedTable( vg1.AddrOfPinnedObject(), vg2.AddrOfPinnedObject() );		
+			vg1.Free(); vg2.Free();
+		}
 }
 #endif

@@ -67,6 +67,7 @@ Shader "Mobile/Ocean" {
 			half _Size;
 			half _FoamFactor;
 			half4 _SunDir;
+			half _Translucency;
 			#ifdef FOGON
 			uniform half4 unity_FogStart;
 			uniform half4 unity_FogEnd;
@@ -97,6 +98,8 @@ Shader "Mobile/Ocean" {
     			half3 viewDir = mul(rotation, objSpaceViewDir);
     			o.lightDir = mul(rotation, half3(_SunDir.xyz));
 
+
+
 				o.bumpTexCoord.w = _SinTime.y * 0.5;
 
 				o.buv = float4(o.bumpTexCoord.x + _CosTime.x * 0.2, o.bumpTexCoord.y + _SinTime.x *0.3, o.bumpTexCoord.x + _CosTime.y * 0.04, o.bumpTexCoord.y + o.bumpTexCoord.w );
@@ -110,9 +113,10 @@ Shader "Mobile/Ocean" {
 
 				o.normViewDir = normalize(viewDir);
 
-				half3 transLightDir = -o.lightDir + v.normal;
+				//translucency calculation
+				o.objSpaceNormal.w = pow ( max (0, dot ( o.normViewDir, o.lightDir ) ), 1 ) * 0.5 * _Translucency;
 
-				o.objSpaceNormal.w = pow ( max (0, dot ( o.normViewDir, -transLightDir ) ), 1 ) * 0.5;
+
 
 				#ifdef SHORE_ON
 				o.ref = ComputeScreenPos(o.pos);
@@ -144,7 +148,7 @@ Shader "Mobile/Ocean" {
 
 			//sampler2D _Fresnel;
 			half _FoamSize;
-			half _Translucency;
+			
 			half4 _SurfaceColor;
 			half4 _WaterColor;
 			half _Specularity;
@@ -203,7 +207,7 @@ Shader "Mobile/Ocean" {
 				#endif
 				 //-----------------------------------------------------------------------------------------------------------------------------------------------------------
 				 //translucency
-				half3 wc = _WaterColor.rgb * i.objSpaceNormal.w * _Translucency * _SunColor.rgb;//* floatVec.z 
+				half3 wc = _WaterColor.rgb * i.objSpaceNormal.w  * _SunColor.rgb;//* floatVec.z 
 
 				half4 result = half4(wc.x , wc.y , wc.z, 1);
 				//-----------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -215,7 +219,7 @@ Shader "Mobile/Ocean" {
 				//half4 result = half4(0 , 0 , 0, 1);
 				//method2
 				result.rgb += lerp(refraction, reflection, fresnelTerm)*_SunColor.rgb + clamp(foam, 0.0, 1.0)*_SunColor.b + specular*_SunColor.rgb;
-
+				
 				//fog
 				//UNITY_APPLY_FOG(i.fogCoord, result); 
 

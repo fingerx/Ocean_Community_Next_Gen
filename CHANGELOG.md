@@ -1,3 +1,50 @@
+**06/03/2019**
+
+- Improved Translucency in the shaders.
+
+- Moved the reflection/refraction renders from OnWillRenderObject to Update
+  because sometimes the reflection camera got stuck.
+  
+
+**04/03/2019**
+Uploaded correct native Android plugins.
+
+
+**28/02/2019 (b)**
+
+- Added support for 32 bit indices and 256x256 tile grid.
+- Added unity ui fps counter.
+- Fixed a bug on setting the scene as dirty when making changes to the inspector.
+
+
+**28/02/2019**
+
+Fixed a bug that was introduced when the fixed gaussian table was implemented.
+Now no crashes should occur when going from lower to higher tile resolution.
+
+Added arm64-v8a native plugin for Android.
+
+Added macOS 64 bit only native plugin.
+
+
+**19/10/2017**
+
+- The Presets path is now found automatically.
+
+
+**15/12/2017**
+
+- Added the ability to load and use a fixed Gaussian table, so that the simulation can be predictable.
+   -- To be able to use this set the flag in the inspector to use a fixed table. Then save your preset in Play mode.
+   -- Afterwards use the presetLoader function to load your preset after the Initialize() function of the simulation.
+   
+- Separated the loadPreset function to its own class.
+
+- Fixed the issues of the inspector not saving changes !
+
+- Examples on how to load presets from the StreamingAssets folder.
+
+
 **27/10/2017**
 
 - Shore Foam Fix
